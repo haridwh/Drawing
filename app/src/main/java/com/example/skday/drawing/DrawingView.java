@@ -8,8 +8,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,6 +25,7 @@ public class DrawingView extends View {
     private int paintColor = 0xFF660000;
     private Canvas drawCanvas;
     private Bitmap canvasBitmap;
+    private float brushSize, lastBrushSize;
 
     private boolean erase = false;
 
@@ -32,11 +35,13 @@ public class DrawingView extends View {
     }
 
     private void setupDrawing(){
+        brushSize = getResources().getInteger(R.integer.medium_size);
+        lastBrushSize = brushSize;
         drawPath = new Path();
         drawPaint = new Paint();
         drawPaint.setColor(paintColor);
         drawPaint.setAntiAlias(true);
-        drawPaint.setStrokeWidth(20);
+        drawPaint.setStrokeWidth(brushSize);
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -88,6 +93,19 @@ public class DrawingView extends View {
     public void startNew(){
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         invalidate();
+    }
+
+    public void setBrushSize(float nSize){
+        float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, nSize, getResources().getDisplayMetrics());
+        brushSize = size;
+        drawPaint.setStrokeWidth(brushSize);
+    }
+
+    public void setLastBrushSize(float lastSize){
+        lastBrushSize = lastSize;
+    }
+    public float getLastBrushSize(){
+        return lastBrushSize;
     }
 
     public void setErase(boolean isErase){
