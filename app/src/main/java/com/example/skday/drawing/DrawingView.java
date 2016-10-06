@@ -104,6 +104,7 @@ public class DrawingView extends View {
     public void setLastBrushSize(float lastSize){
         lastBrushSize = lastSize;
     }
+
     public float getLastBrushSize(){
         return lastBrushSize;
     }
